@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   nginx:
@@ -24,7 +24,7 @@ services:
       - mysql
 
   mysql:
-    image: arm64v8/mysql:5.7
+    image: arm64v8/mysql:8.2
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: fullcycle

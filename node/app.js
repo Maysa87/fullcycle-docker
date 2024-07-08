@@ -3,56 +3,38 @@ const mysql = require('mysql');
 const app = express();
 const port = 3000;
 
-const config = {
+const connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DB
-};
+});
 
-const connection = mysql.createConnection(config);
-
-connection.connect((err) => {
+connection.connect(err => {
     if (err) {
         console.error('Error connecting to MySQL:', err);
         return;
     }
-    console.log('Connected to MySQL');
-
-    const createTable = `CREATE TABLE IF NOT EXISTS people (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-  )`;
-
-    connection.query(createTable, (err, results, fields) => {
-        if (err) {
-            console.error('Error creating table:', err);
-            return;
-        }
-        console.log('Table created or already exists');
-    });
+    console.log('Connected to MySQL as id', connection.threadId);
 });
 
 app.get('/', (req, res) => {
-    const name = 'Full Cycle';
-    const insert = `INSERT INTO people(name) VALUES('${name}')`;
-    connection.query(insert, (err, results, fields) => {
+    connection.query('INSERT INTO people(name) VALUES("Full Cycle Rocks!")', (err, result) => {
         if (err) {
             console.error('Error inserting name:', err);
-            res.send('Error inserting name');
+            res.send(`<h1>Error inserting name: ${err.message}</h1>`);
             return;
         }
 
-        const select = `SELECT name FROM people`;
-        connection.query(select, (err, results, fields) => {
+        connection.query('SELECT name FROM people', (err, rows) => {
             if (err) {
-                console.error('Error selecting names:', err);
-                res.send('Error selecting names');
+                console.error('Error fetching names:', err);
+                res.send(`<h1>Error fetching names: ${err.message}</h1>`);
                 return;
             }
 
-            const namesList = results.map(row => `<li>${row.name}</li>`).join('');
-            res.send(`<h1>Full Cycle Rocks!</h1><ul>${namesList}</ul>`);
+            let names = rows.map(row => row.name).join('<br>');
+            res.send(`<h1>Full Cycle Rocks!</h1><br>${names}`);
         });
     });
 });

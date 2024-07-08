@@ -19,7 +19,7 @@ services:
       - MYSQL_HOST=mysql
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
-      - MYSQL_DB=fullcycle
+      - MYSQL_DB=full cycle
     depends_on:
       - mysql
 

@@ -14,8 +14,10 @@ connection.connect(err => {
     if (err) {
         console.error('Error connecting to MySQL:', err);
         return;
-    }
+    } else {
     console.log('Connected to MySQL as id', connection.threadId);
+    }
+    connection.release();
 });
 
 app.get('/', (req, res) => {

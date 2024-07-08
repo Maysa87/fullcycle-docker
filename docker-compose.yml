@@ -19,7 +19,7 @@ services:
       - MYSQL_HOST=mysql
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
-      - MYSQL_DB=full cycle
+      - MYSQL_DB=full-cycle
     depends_on:
       - mysql
 
@@ -27,7 +27,7 @@ services:
     image: arm64v8/mysql:8.2
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: fullcycle
+      MYSQL_DATABASE: full-cycle
     volumes:
       - mysql_data:/var/lib/mysql
 

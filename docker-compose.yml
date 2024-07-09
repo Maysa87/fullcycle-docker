@@ -22,12 +22,16 @@ services:
       - MYSQL_DB=full-cycle
     depends_on:
       - mysql
+    command: sh -c "node wait-for-mysql.js && node app.js"
+
 
   mysql:
     image: arm64v8/mysql:8.2
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: full-cycle
+    ports:
+      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 

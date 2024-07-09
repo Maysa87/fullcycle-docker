@@ -3,11 +3,12 @@ FROM node:latest
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+# Install MySQL client tools
+RUN apt-get update && apt-get install -y mysql-client
 
-CMD ["node", "app.js"]
+EXPOSE 3000
+CMD ["node", "wait-for-mysql.js"]

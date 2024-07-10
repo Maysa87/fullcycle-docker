@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:15
 
 WORKDIR /usr/src/app
 
@@ -7,8 +7,6 @@ RUN npm install
 
 COPY . .
 
-# Install MySQL client tools
-RUN apt-get update && apt-get install -y mysql-client
-
 EXPOSE 3000
-CMD ["node", "wait-for-mysql.js"]
+
+CMD ["node", "index.js"]

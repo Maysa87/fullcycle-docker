@@ -20,3 +20,22 @@ services:
       - ./node:/usr/src/app
     environment:
       NODE_ENV: production
+      MYSQL_HOST: mysql
+      MYSQL_USER: example
+      MYSQL_PASSWORD: example
+      MYSQL_DB: db
+    depends_on:
+      - mysql
+
+  mysql:
+    image: arm64v8/mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

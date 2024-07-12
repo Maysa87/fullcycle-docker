@@ -11,6 +11,20 @@ O retorno da aplicação Node.js para o nginx deverá ser:
 
 - Lista de nomes cadastradas no banco de dados.
 
+## 🚀 Tecnologias
+
+- **[Docker](https://www.docker.com/)**
+- **[Node.js](https://nodejs.org/en/)**
+- **[GoLand JetBrains IDE](https://www.jetbrains.com/go/)**
+- **[MySQL](https://www.mysql.com/)**
+- **[Nginx](https://www.nginx.com/)**
+- **[Docker Hub](https://hub.docker.com/)**
+
+## Para executar o projeto:
+```bash
+docker network create app-node-network
+```
+
 ```bash
 docker-compose up -d 
 ```

@@ -1,29 +1,81 @@
 const express = require('express');
+const axios = require('axios').default;
+const mysql = require('mysql');
+
 const app = express();
-const connection = require('./database');
+const PORT = 3000;
 
-app.get('/', (req, res) => {
-    const name = 'User ' + Math.floor(Math.random() * 1000);
-    connection.query(`INSERT INTO people (name) VALUES ('${name}')`, (err) => {
-        if (err) {
-            console.error('Error inserting into database:', err);
-            return res.status(500).send('Internal Server Error');
+const dbConfig = {
+    host: 'db',
+    user: 'root',
+    password: 'password',
+    database: 'nodedb',
+};
+
+app.get('/', (_req, res) => {
+    InsertName(res);
+});
+
+app.listen(PORT, () => {
+    console.log(`Application running on Port...: ${PORT} 🚀`);
+});
+
+async function getName() {
+    const RANDOM = Math.floor(Math.random() * 10);
+    const response = await axios.get('https://swapi.dev/api/people');
+    return response.data.results[RANDOM].name;
+}
+
+async function InsertName(res) {
+    const name = await getName();
+    const connection = mysql.createConnection(dbConfig);
+    const INSERT_QUERY = `INSERT INTO people(name) values('${name}')`;
+
+    connection.query(INSERT_QUERY, (error, _results, _fields) => {
+        if (error) {
+            console.log(`Error inserting name: ${error}`);
+            res.status(500).send('Error inserting name');
+            return;
         }
-        connection.query('SELECT name FROM people', (err, results) => {
-            if (err) {
-                console.error('Error querying database:', err);
-                return res.status(500).send('Internal Server Error');
-            }
-            let response = '<h1>Full Cycle Rocks!</h1><ul>';
-            results.forEach(row => {
-                response += `<li>${row.name}</li>`;
-            });
-            response += '</ul>';
-            res.send(response);
-        });
-    });
-});
 
-app.listen(3000, () => {
-    console.log('Server running on port 3000');
-});
+        console.log(`${name} inserted successfully in the database!`);
+        getAll(res, connection);
+    });
+}
+
+function getAll(res, connection) {
+    const SELECT_QUERY = `SELECT id, name FROM people`;
+
+    connection.query(SELECT_QUERY, (error, results) => {
+        if (error) {
+            console.log(`Error getting people: ${error}`);
+            res.status(500).send('Error getting people');
+            return;
+        }
+
+        const tableRows = results
+            .map(
+                (person) => `
+        <tr>
+          <td>${person.id}</td>
+          <td>${person.name}</td>
+        </tr>
+      `
+            )
+            .join('');
+        const table = `
+      <table>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+        </tr>${tableRows}
+      </table>`;
+
+        res.send(`
+      <h1>Full Cycle Rocks!</h1>
+      ${table}
+    `);
+
+        connection.end();
+    });
+}

@@ -1,6 +1,6 @@
 const express = require('express');
 const axios = require('axios').default;
-const mysql = require('mysql');
+const mysql2 = require('mysql2');
 
 const app = express();
 const PORT = 3000;
@@ -28,7 +28,7 @@ async function getName() {
 
 async function InsertName(res) {
     const name = await getName();
-    const connection = mysql.createConnection(dbConfig);
+    const connection = mysql2.createConnection(dbConfig);
     const INSERT_QUERY = `INSERT INTO people(name) values('${name}')`;
 
     connection.query(INSERT_QUERY, (error, _results, _fields) => {

@@ -11,6 +11,8 @@ O retorno da aplicação Node.js para o nginx deverá ser:
 
 - Lista de nomes cadastradas no banco de dados.
 
+<img width="461" alt="Screenshot 2024-07-17 at 13 59 35" src="https://github.com/user-attachments/assets/2fbc4016-c611-429f-a5df-f530dcffe11e">
+
 ## 🚀 Tecnologias
 
 - **[Docker](https://www.docker.com/)**
